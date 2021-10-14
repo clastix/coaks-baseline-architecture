@@ -23,7 +23,7 @@ For our use case, we are going to work through an energy company called **Acme C
 
 ## Cloud Architecture
 
-![cloud architecture](./diagrams/images/cloud-architecture.drawio.png)
+![cloud architecture](./diagrams/cloud-architecture.drawio.png)
 
 
 ## Prerequisites
