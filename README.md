@@ -1,4 +1,4 @@
-# Capsule over AKS (CoAKS) Baseline Architecture - DRAFT
+# Capsule over AKS (CoAKS) Baseline Architecture
 This reference implementation introduces the recommended starting (baseline) infrastructure architecture for implementing a multi-tenancy [Azure AKS](https://azure.microsoft.com/services/kubernetes-service) cluster using the [Clastix Capsule Operator](https://github.com/clastix/capsule). 
 
 This implementation and document is meant to guide Azure users through the process of getting this secure baseline infrastructure deployed and understanding the components of it.
@@ -12,12 +12,11 @@ The material here is relatively dense. We strongly encourage you to dedicate tim
 
 ## Use Case: Container as a Service
 
-Every organization with several business units have the same dilemma:
-> Reduncing cost infrastructure but keeping isolation between the units.
+Every organization with several business units have the same dilemma: *reduncing cost infrastructure but keeping isolation between the units*.
 
 This dilemma points us to a multitenancy environment and this is the purpose of [Capsule](https://github.com/clastix/capsule).
 
-For our use case, we are going to work through an energy company called **Acme Corp** which is trying to build their own CaaS (Container as a Service) based on Kubernetes to serve multiple lines of business. Each line of business has its team of engineers that are responsible for the development, deployment, and operating of their digital products. Currently they have two business units: Solar and Eolic.
+For our use case, we are going to work through an energy company called **Energy Corp** which is trying to build their own PaaS (Platform as a Service) based on Kubernetes to serve multiple lines of business. Each line of business has its team of engineers that are responsible for the development, deployment, and operating of their digital products. Currently they have two business units: Solar and Eolic.
 
 [Azure AKS](https://docs.microsoft.com/azure/aks/) will be used to provide Kubernetes cluster and it will be integrated with [Azure Active Directory (AAD)](https://azure.microsoft.com/services/active-directory/) to ensure a robust authentication and authorization mechanism.
 
@@ -47,7 +46,7 @@ We are going to mainly use the following three tools:
 
 1. [AKS Creation with AAD integration](guides/create-aks-with-add.md)
 2. [Capsule Installation](guides/capsule-installation.md)
-3. [Multitenance Environment](guides/multitenance-environment.md)
+3. [Setup a Multitenance Environment](guides/multitenance-environment.md)
 
 ## What’s next
 
