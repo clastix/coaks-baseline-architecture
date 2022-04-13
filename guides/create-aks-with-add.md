@@ -1,18 +1,18 @@
 # AKS with Azure AD integration
 
-Microsoft offers one of the best OIDC provider out there, i.e. [Azure Active Directory](https://azure.microsoft.com/services/active-directory/), therefore we would like to use it in order to provide a secure access to **Energy Corp's PaaS** based on [Clastix Capsule](https://capsule.clastix.io).
+Microsoft offers one of the best OIDC providers out there, i.e. [Azure Active Directory](https://azure.microsoft.com/services/active-directory/), therefore we would like to use it to provide secure access to **Energy Corp's PaaS** based on [Clastix Capsule](https://capsule.clastix.io).
 
 The administrator will have to provide a Kubernetes cluster using Azure [AKS](https://docs.microsoft.comhttps://docs.microsoft.com/en-us/azure/aks/) and integrates with Active Directory.
 
 ## Azure Log In
 
-The first step is to log into Azure ecosystem using the `az` CLI. It will redirect to [portal Azure](https://portal.azure.com) where you will actually log in.
+The first step is to log into the Azure ecosystem using the `az` CLI. It will redirect to [portal Azure](https://portal.azure.com) where you will log in.
 
 ```bash
 az login
 ```
 
-This logins the Azure admin user to create Azure resources in one of the assigned subscriptions.  
+This log in the Azure admin user to create Azure resources in one of the assigned subscriptions.  
 
 ## Active Directory
 
@@ -20,7 +20,7 @@ The Azure admin will create different groups according to the multitenant enviro
 
 ### CoAKS Admin Group
 
-The first group `myCoAKSAdminGroup` is the admin one. It will only contain users with the capability of managing the cluster with CoAKS cluster admin permissions:
+The first group `myCoAKSAdminGroup` is the admin one. It will only contain users with the capability of managing the cluster with CoAKS cluster-admin permissions:
 
 ```bash
 
@@ -34,7 +34,7 @@ CoAKS_ADMIN_GROUP_OBJECTID=$(az ad group create \
 
 > This group will be used later during the CoAKS cluster creation.
 
-Assign a user to the group `myCoAKSAdminGroup` that will be the CoAKS cluster admin:
+Assign a user to the group `myCoAKSAdminGroup` that will be the CoAKS cluster-admin:
 
 ```bash
 CoAKS_ADMIN_USER_NAME="coaks-admin@energycorp.com"
@@ -181,14 +181,14 @@ az aks create \
   --aad-admin-group-object-ids $CoAKS_ADMIN_GROUP_OBJECTID
 ```
 
-Not all Azure regions support availability zones. For more information, see [Azure regions with availability zones](https://docs.microsoft.com/en-ushttps://docs.microsoft.com/en-us/azure/availability-zones/az-overview#azure-regions-with-availability-zones). For more information on the Azure CLI command and provisionig options, see [az aks create](https://docs.microsoft.com/en-us/clihttps://docs.microsoft.com/en-us/azure/aks?view=azure-cli-latest#az_aks_create).
+Not all Azure regions support availability zones. For more information, see [Azure regions with availability zones](https://docs.microsoft.com/en-ushttps://docs.microsoft.com/en-us/azure/availability-zones/az-overview#azure-regions-with-availability-zones). For more information on the Azure CLI command and provisioning options, see [az aks create](https://docs.microsoft.com/en-us/clihttps://docs.microsoft.com/en-us/azure/aks?view=azure-cli-latest#az_aks_create).
 
-If you want to improve cluster security and minimize attacks, create a private AKS cluster or grant the access to the API server to a limited set of IP address ranges. For more information, see [Create a private Azure Kubernetes Service cluster](https://docs.microsoft.com/en-ushttps://docs.microsoft.com/en-us/azure/aks/private-clusters) and [Secure access to the API server using authorized IP address ranges in Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-ushttps://docs.microsoft.com/en-us/azure/aks/api-server-authorized-ip-ranges). For other best practices, see the [here](#references) section below.
+If you want to improve cluster security and minimize attacks, create a private AKS cluster or grant access to the API server to a limited set of IP address ranges. For more information, see [Create a private Azure Kubernetes Service cluster](https://docs.microsoft.com/en-ushttps://docs.microsoft.com/en-us/azure/aks/private-clusters) and [Secure access to the API server using authorized IP address ranges in Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-ushttps://docs.microsoft.com/en-us/azure/aks/api-server-authorized-ip-ranges). For other best practices, see the [here](#references) section below.
 
 
 ### Assign Kubernetes Roles
 
-All the users belonging to the `mycoaks-adminGroup` act as cluster admin:
+All the users belonging to the `myCoAKSAdminGroup` act as cluster-admin:
 
 ```bash
 $ az aks get-credentials --resource-group myCoAKSResourceGroup --name myCoAKSCluster --overwrite-existing
@@ -231,9 +231,9 @@ For more information about AKS cluster access control and RBAC, see:
 - [Use Azure RBAC for Kubernetes Authorization](https://docs.microsoft.com/en-us/azure/aks/manage-azure-rbac).
 - [Use Azure role-based access control to define access to the Kubernetes configuration file in Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/control-kubeconfig-access)
 
-### Disable local accounts
+### Disable local account (optional)
 
-When deploying an AKS cluster, local accounts are enabled by default as cluster admins. Once the AKS cluster gets created, as local user, you can grab the credentials and check it out:
+When deploying an AKS cluster, the local account is by default a cluster admin. Once the AKS cluster gets created, as a local user, you can grab the credentials and check it out:
 
 ```bash
 az aks get-credentials --resource-group myCoAKSResourceGroup --name myCoAKSCluster --overwrite-existing --admin
@@ -266,12 +266,8 @@ users:
     token: REDACTED
 ```
 
-Azure offers the ability to disable local accounts via a flag, see [Disable local accounts](https://docs.microsoft.com/en-us/azure/aks/managed-aad#disable-local-accounts). 
+Optionally, Azure offers the ability to disable the local account to get cluster-admin permissions, see [Disable local accounts](https://docs.microsoft.com/en-us/azure/aks/managed-aad#disable-local-accounts). 
 
-
-## What’s next
-
-We are ready to [install Capsule](capsule-installation.md).
 
 ## References
 
@@ -305,3 +301,7 @@ We are ready to [install Capsule](capsule-installation.md).
 - [Advanced Azure Kubernetes Service (AKS) microservices architecture](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/aks-microservices-advanced)
 - [CI/CD pipeline for container-based workloads](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/apps/devops-with-aks)
 - [Building a telehealth system on Azure](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/apps/telehealth-system)
+
+## What’s next
+
+We are ready to [install Capsule](capsule-installation.md).
