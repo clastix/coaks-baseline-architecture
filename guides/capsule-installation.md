@@ -2,7 +2,7 @@
 
 Having our AKS cluster up and running and our `kubectl` has access to the API as **Energy Corp's PaaS** cluster administrator, i.e. `coaks-admin@energycorp.com`, we can go on with the **Capsule Operator** installation. 
 
-Login as cluster admin:
+Login as cluster-admin:
 
 ```bash
 $ az login
@@ -40,7 +40,7 @@ $ helm install capsule clastix/capsule \
 
 Install the [Capsule Proxy](https://github.com/clastix/capsule-proxy), an add-on for the Capsule Operator. It allows to overcome the limitations of Kubernetes API Server on listing owned cluster-scoped resources, like _Namespaces_, _Ingress Classes_, _Storage Classes_, _Nodes_, and others covered by Capsule.
 
-The Capsule Proxy acts as a _gatekeeper_ for tenant users in order to list owned cluster-scoped resources. The tenant users access the APIs server through the Capsule Proxy. Behind the scene, it implements a simple reverse proxy that intercepts only specific requests to the APIs server. All the other requests are proxied transparently to the APIs server for regular RBAC evaluation.
+The Capsule Proxy acts as a _gatekeeper_ for tenant users to list owned cluster-scoped resources. The tenant users access the APIs server through the Capsule Proxy. Behind the scene, it implements a simple reverse proxy that intercepts only specific requests to the APIs server. All the other requests are proxied transparently to the APIs server for regular RBAC evaluation.
 
 ```bash
 $ helm install capsule-proxy clastix/capsule-proxy \
@@ -57,7 +57,7 @@ $ kubectl -n capsule-system annotate \
    service capsule-proxy service.beta.kubernetes.io/azure-dns-label-name=coaks
 ```
 
-Actually, the Capsule Proxy generates a self signed TLS certificate using a fake CA. If you have your own certificate, create a TLS secrets in the same namespace:
+The Capsule Proxy generates a self-signed TLS certificate using a fake CA. If you have your certificate, create a TLS secret in the same namespace:
 
 ```bash
 $ kubectl -n capsule-system create secrets tls capsule-proxy \
@@ -87,4 +87,4 @@ $ helm upgrade capsule-proxy clastix/capsule-proxy \
 
 ## What’s next
 
-**Energy Corp's PaaS** cluster administrator can start to set up the [multitenance environment](multitenance-environment.md).
+**Energy Corp's PaaS** cluster administrator can start to set up the [multitenance environment](multitenancy-environment.md).
