@@ -1,96 +1,90 @@
 # Capsule Installation
 
-Having our AKS cluster up and running and our kubectl has access to the API, we can go on with the capsule installation. 
+Having our AKS cluster up and running and our `kubectl` has access to the API as **Energy Corp's PaaS** cluster administrator, i.e. `coaks-admin@energycorp.com`, we can go on with the **Capsule Operator** installation. 
 
-A dedicated namespaced will be created for capsule's objects and the installation will be done using Helm although other methods are also available.
+Login as cluster-admin:
 
-## 1. Namespace creation
+```bash
+$ az login
+$ az aks get-credentials --resource-group myCoAKSResourceGroup --name myCoAKSCluster
+```
+
+## Namespace creation
+
+A dedicated namespaced will be created for Capsule's objects and the installation will be done using Helm although other methods are also available.
 
 ```bash
 $ kubectl create namespace capsule-system
 namespace/capsule-system created
 ```
 
-## 2. Add Helm Chart Repository
+## Add Helm Chart Repository
 
 ```bash
 $ helm repo add clastix https://clastix.github.io/charts
 "clastix" has been added to your repositories
 ```
 
-## 3. Installing Capsule Helm Chart
+## Installing Capsule Helm Chart
+
+Capsule needs to know the allowed groups it will work with, therefore, we need to register the `Object ID` of the Azure AD group `myCoAKSCapsuleGroup` as Capsule User Group under the `CapsuleConfiguration`:
 
 ```bash
-$ helm install capsule clastix/capsule -n capsule-system
-NAME: capsule
-LAST DEPLOYED: Fri Oct  1 14:52:59 2021
-NAMESPACE: capsule-system
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-- Capsule Operator Helm Chart deployed:
-
-   # Check the capsule logs
-   $ kubectl logs -f deployment/capsule-controller-manager -c manager -n capsule-system
-
-
-   # Check the capsule logs
-   $ kubectl logs -f deployment/capsule-controller-manager -c manager -n capsule-system
-
-- Manage this chart:
-
-   # Upgrade Capsule
-   $ helm upgrade capsule -f <values.yaml> capsule -n capsule-system
-
-   # Show this status again
-   $ helm status capsule -n capsule-system
-
-   # Uninstall Capsule
-   $ helm uninstall capsule -n capsule-system
+$ helm install capsule clastix/capsule \
+   -n capsule-system \
+   --set manager.options.forceTenantPrefix=true \
+   --set manager.options.capsuleUserGroups[0]=$CoAKS_CAPSULE_GROUP_OBJECTID
 ```
 
-[capsule helm chart options](https://github.com/clastix/capsule/tree/master/charts/capsule)
+## Installing Capsule-Proxy Helm Chart
 
-## 4. Installing Capsule-Proxy Helm Chart
+Install the [Capsule Proxy](https://github.com/clastix/capsule-proxy), an add-on for the Capsule Operator. It allows to overcome the limitations of Kubernetes API Server on listing owned cluster-scoped resources, like _Namespaces_, _Ingress Classes_, _Storage Classes_, _Nodes_, and others covered by Capsule.
+
+The Capsule Proxy acts as a _gatekeeper_ for tenant users to list owned cluster-scoped resources. The tenant users access the APIs server through the Capsule Proxy. Behind the scene, it implements a simple reverse proxy that intercepts only specific requests to the APIs server. All the other requests are proxied transparently to the APIs server for regular RBAC evaluation.
 
 ```bash
-$ helm install capsule-proxy clastix/capsule-proxy -n capsule-system
-NAME: capsule-proxy
-LAST DEPLOYED: Fri Oct  1 14:54:25 2021
-NAMESPACE: capsule-system
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-- Capsule-proxy Helm Chart deployed:
-
-   # Check the capsule-proxy logs
-   $ kubectl logs -f deployment/capsule-proxy -n capsule-system
-
-- Manage this chart:
-
-   # Upgrade capsule-proxy
-   $ helm upgrade capsule-proxy -f <values.yaml> capsule-proxy -n capsule-system
-
-   # Show this status again
-   $ helm status capsule-proxy -n capsule-system
-
-   # Uninstall capsule-proxy
-   $ helm uninstall capsule-proxy -n capsule-system
+$ helm install capsule-proxy clastix/capsule-proxy \
+   -n capsule-system \
+   --set service.type=LoadBalancer \
+   --set service.port=443 \
+   --set options.oidcUsernameClaim=unique_name
 ```
 
-[capsule-proxy helm chart options](https://github.com/clastix/capsule-proxy/blob/master/charts/capsule-proxy)
-
-## 5. Add the Object IDs of the groups to CapsuleConfiguration
-
-Capsule needs to know the allowed groups it will work with, therefore, we need to register the `Object ID` of the group `myCoAKSContainerGroup` under `CapsuleConfiguration`.
+The Capsule Proxy will be exposed to tenant users with a LoadBalancer service type and it will be reached as `https://coaks.<region>.cloudapp.azure.com:443`. To achieve this, annotate the service:
 
 ```bash
-$ kubectl patch capsuleconfiguration -n capsule-system default --type=json -p '[{"op": "add", "path": "/spec/userGroups/1", "value": "<myCoAKSContainerGroup Object ID>"}]'
-capsuleconfiguration.capsule.clastix.io/default patched
+$ kubectl -n capsule-system annotate \
+   service capsule-proxy service.beta.kubernetes.io/azure-dns-label-name=coaks
 ```
+
+The Capsule Proxy generates a self-signed TLS certificate using a fake CA. If you have your certificate, create a TLS secret in the same namespace:
+
+```bash
+$ kubectl -n capsule-system create secrets tls capsule-proxy \
+   --cert=/path/to/certificate/file/tls.crt \
+   --key=/path/to/key/file/tls.key
+```
+
+and let's Capsule Proxy to use it:
+
+```bash
+$ helm upgrade capsule-proxy clastix/capsule-proxy \
+   -n capsule-system \
+   --set service.type=LoadBalancer \
+   --set service.port=443 \
+   --set options.oidcUsernameClaim=unique_name \
+   --set options.generateCertificates=false
+```
+
+## References
+
+### Capsule
+
+- [Capsule](https://capsule.clastix.io)
+- [Capsule Proxy](https://capsule.clastix.io/docs/general/proxy)
+- [Access and identity options for Azure Kubernetes Service AKS](https://docs.microsoft.com/en-us/azure/aks/concepts-identity)
+- [Kubernetes Authentication](https://kubernetes.io/docs/reference/access-authn-authz/authentication/)
 
 ## What’s next
 
-Administrator of Acme Corp's Caas can start to set up the [multitenance environment](multitenance-environment.md).
+**Energy Corp's PaaS** cluster administrator can start to set up the [multitenance environment](multitenancy-environment.md).
