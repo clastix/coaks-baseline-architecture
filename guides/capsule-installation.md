@@ -87,4 +87,4 @@ $ helm upgrade capsule-proxy clastix/capsule-proxy \
 
 ## What’s next
 
-**Energy Corp's PaaS** cluster administrator can start to set up the [multitenance environment](multitenancy-environment.md).
+**Energy Corp's PaaS** cluster administrator can start to set up the [multi-tenancy environment](multitenant-environment.md).
