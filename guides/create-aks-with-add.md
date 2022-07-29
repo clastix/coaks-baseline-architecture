@@ -23,12 +23,10 @@ The Azure admin will create different groups according to the multitenant enviro
 The first group `myCoAKSAdminGroup` is the admin one. It will only contain users with the capability of managing the cluster with CoAKS cluster-admin permissions:
 
 ```bash
-
-```bash
 CoAKS_ADMIN_GROUP_OBJECTID=$(az ad group create \
   --display-name myCoAKSAdminGroup \
   --mail-nickname myCoAKSAdminGroup \
-  --query objectId \
+  --query id \
   --output tsv)
 ```
 
@@ -43,9 +41,8 @@ CoAKS_ADMIN_USER_PASSWORD="ChangeMe123#"
 CoAKS_ADMIN_USER_OBJECTID=$(az ad user create \
   --display-name ${CoAKS_ADMIN_USER_NAME} \
   --user-principal-name ${CoAKS_ADMIN_USER_NAME} \
-  --force-change-password-next-login  \
   --password ${CoAKS_ADMIN_USER_PASSWORD} \
-  --query objectId -o tsv)
+  --query id -o tsv)
 
 az ad group member add \
   --group myCoAKSAdminGroup \
@@ -62,7 +59,7 @@ The second step is to create an Azure AD group for the `Solar` business unit:
 CoAKS_SOLAR_GROUP_OBJECTID=$(az ad group create \
   --display-name myCoAKSSolarGroup \
   --mail-nickname myCoAKSSolarGroup \
-  --query objectId \
+  --query id \
   --output tsv)
 ```
 
@@ -77,9 +74,8 @@ CoAKS_SOLAR_USER_PASSWORD="ChangeMe123#"
 CoAKS_SOLAR_USER_OBJECTID=$(az ad user create \
   --display-name ${CoAKS_SOLAR_USER_NAME} \
   --user-principal-name ${CoAKS_SOLAR_USER_NAME} \
-  --force-change-password-next-login  \
   --password ${CoAKS_SOLAR_USER_PASSWORD} \
-  --query objectId -o tsv)
+  --query id -o tsv)
 
 az ad group member add \
   --group myCoAKSSolarGroup \
@@ -96,7 +92,7 @@ The third step is to create an Azure AD group for the `Eolic` business unit:
 CoAKS_EOLIC_GROUP_OBJECTID=$(az ad group create \
   --display-name myCoAKSEolicGroup \
   --mail-nickname myCoAKSEolicGroup \
-  --query objectId \
+  --query id \
   --output tsv)
 ```
 
@@ -111,9 +107,8 @@ CoAKS_EOLIC_USER_PASSWORD="ChangeMe123#"
 CoAKS_EOLIC_USER_OBJECTID=$(az ad user create \
   --display-name ${CoAKS_EOLIC_USER_NAME} \
   --user-principal-name ${CoAKS_EOLIC_USER_NAME} \
-  --force-change-password-next-login  \
   --password ${CoAKS_EOLIC_USER_PASSWORD} \
-  --query objectId -o tsv)
+  --query id -o tsv)
 
 az ad group member add \
   --group myCoAKSEolicGroup \
@@ -160,7 +155,7 @@ Having a resource group and the Azure AD groups ready, the administrator just ne
 ```bash
 CoAKS_ADMIN_GROUP_OBJECTID=$(az ad group show \
   --group myCoAKSAdminGroup \
-  --query objectId \
+  --query id \
   --output tsv)
 ```
 
