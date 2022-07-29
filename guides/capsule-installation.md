@@ -33,7 +33,7 @@ Capsule needs to know the allowed groups it will work with, therefore, we need t
 $ helm install capsule clastix/capsule \
    -n capsule-system \
    --set manager.options.forceTenantPrefix=true \
-   --set manager.options.capsuleUserGroups[0]=$CoAKS_CAPSULE_GROUP_OBJECTID
+   --set "manager.options.capsuleUserGroups[0]=$CoAKS_CAPSULE_GROUP_OBJECTID"
 ```
 
 ## Installing Capsule-Proxy Helm Chart
