@@ -112,4 +112,4 @@ solar-testing       Active   1h
 
 ## What’s next
 
-[Isolate tenants](isoalte-tenants.md).
+Installing the Kubernetes Dashboard for [tenant owners access](04-kubernets-dashboard.md).

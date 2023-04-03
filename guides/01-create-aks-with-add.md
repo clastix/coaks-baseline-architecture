@@ -211,7 +211,7 @@ CoAKS_CLUSTER_ID=$(az aks show \
 
 CoAKS_CAPSULE_GROUP_OBJECTID=$(az ad group show \
   --group myCoAKSCapsuleGroup \
-  --query objectId \
+  --query id \
   --output tsv)
 
 az role assignment create \
