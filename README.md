@@ -47,4 +47,4 @@ The material here is relatively dense. We strongly encourage you to dedicate tim
 
 ## What’s next
 
-[Let's start building the infrastructure](guides/create-aks-with-add.md)
+[Let's start building the infrastructure](guides/01-create-aks-with-add.md)

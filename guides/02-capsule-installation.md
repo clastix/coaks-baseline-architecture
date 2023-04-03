@@ -43,11 +43,14 @@ Install the [Capsule Proxy](https://github.com/clastix/capsule-proxy), an add-on
 The Capsule Proxy acts as a _gatekeeper_ for tenant users to list owned cluster-scoped resources. The tenant users access the APIs server through the Capsule Proxy. Behind the scene, it implements a simple reverse proxy that intercepts only specific requests to the APIs server. All the other requests are proxied transparently to the APIs server for regular RBAC evaluation.
 
 ```bash
-$ helm install capsule-proxy clastix/capsule-proxy \
+$ helm upgrade --install capsule-proxy clastix/capsule-proxy \
    -n capsule-system \
    --set service.type=LoadBalancer \
    --set service.port=443 \
-   --set options.oidcUsernameClaim=unique_name
+   --set options.oidcUsernameClaim=unique_name \
+   --set "options.ignoredUserGroups[0]=$CoAKS_ADMIN_GROUP_OBJECTID" \
+   --set "options.additionalSANs[0]=capsule-proxy.westeurope.cloudapp.azure.com" \
+   --set service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=capsule-proxy
 ```
 
 The Capsule Proxy will be exposed to tenant users with a LoadBalancer service type and it will be reached as `https://coaks.<region>.cloudapp.azure.com:443`. To achieve this, annotate the service:
@@ -87,4 +90,4 @@ $ helm upgrade capsule-proxy clastix/capsule-proxy \
 
 ## What’s next
 
-**Energy Corp's PaaS** cluster administrator can start to set up the [multi-tenancy environment](multitenant-environment.md).
+**Energy Corp's PaaS** cluster administrator can start to set up the [multi-tenancy environment](03-multitenant-environment.md).
