@@ -299,4 +299,4 @@ Optionally, Azure offers the ability to disable the local account to get cluster
 
 ## What’s next
 
-We are ready to [install Capsule](capsule-installation.md).
+We are ready to [install Capsule](02-capsule-installation.md).
