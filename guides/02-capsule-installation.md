@@ -35,50 +35,6 @@ $ helm install capsule clastix/capsule \
    --set manager.options.forceTenantPrefix=true \
    --set "manager.options.capsuleUserGroups[0]=$CoAKS_CAPSULE_GROUP_OBJECTID"
 ```
-
-## Installing Capsule-Proxy Helm Chart
-
-Install the [Capsule Proxy](https://github.com/clastix/capsule-proxy), an add-on for the Capsule Operator. It allows to overcome the limitations of Kubernetes API Server on listing owned cluster-scoped resources, like _Namespaces_, _Ingress Classes_, _Storage Classes_, _Nodes_, and others covered by Capsule.
-
-The Capsule Proxy acts as a _gatekeeper_ for tenant users to list owned cluster-scoped resources. The tenant users access the APIs server through the Capsule Proxy. Behind the scene, it implements a simple reverse proxy that intercepts only specific requests to the APIs server. All the other requests are proxied transparently to the APIs server for regular RBAC evaluation.
-
-```bash
-$ helm upgrade --install capsule-proxy clastix/capsule-proxy \
-   -n capsule-system \
-   --set service.type=LoadBalancer \
-   --set service.port=443 \
-   --set options.oidcUsernameClaim=unique_name \
-   --set "options.ignoredUserGroups[0]=$CoAKS_ADMIN_GROUP_OBJECTID" \
-   --set "options.additionalSANs[0]=capsule-proxy.westeurope.cloudapp.azure.com" \
-   --set service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=capsule-proxy
-```
-
-The Capsule Proxy will be exposed to tenant users with a LoadBalancer service type and it will be reached as `https://coaks.<region>.cloudapp.azure.com:443`. To achieve this, annotate the service:
-
-```bash
-$ kubectl -n capsule-system annotate \
-   service capsule-proxy service.beta.kubernetes.io/azure-dns-label-name=coaks
-```
-
-The Capsule Proxy generates a self-signed TLS certificate using a fake CA. If you have your certificate, create a TLS secret in the same namespace:
-
-```bash
-$ kubectl -n capsule-system create secrets tls capsule-proxy \
-   --cert=/path/to/certificate/file/tls.crt \
-   --key=/path/to/key/file/tls.key
-```
-
-and let's Capsule Proxy to use it:
-
-```bash
-$ helm upgrade capsule-proxy clastix/capsule-proxy \
-   -n capsule-system \
-   --set service.type=LoadBalancer \
-   --set service.port=443 \
-   --set options.oidcUsernameClaim=unique_name \
-   --set options.generateCertificates=false
-```
-
 ## References
 
 ### Capsule
@@ -90,4 +46,4 @@ $ helm upgrade capsule-proxy clastix/capsule-proxy \
 
 ## What’s next
 
-**Energy Corp's PaaS** cluster administrator can start to set up the [multi-tenancy environment](03-multitenant-environment.md).
+We are ready to [install Capsule Proxy](03-capsule-proxy-installation.md).

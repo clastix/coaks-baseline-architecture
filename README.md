@@ -41,9 +41,10 @@ We are going to mainly use the following three tools:
 
 The material here is relatively dense. We strongly encourage you to dedicate time to walk through these instructions, with a mind to learning. We do NOT provide any "one-click" deployment here. However, once you've understood the components involved it is encouraged that you build suitable, auditable GitOps deployment processes around your final infrastructure.
 
-1. [AKS Creation with AAD integration](guides/create-aks-with-add.md)
-2. [Capsule Installation](guides/capsule-installation.md)
-3. [Setup a Multitenancy Environment](guides/multitenancy-environment.md)
+1. [AKS Creation with AAD integration](guides/01-create-aks-with-add.md)
+2. [Capsule Installation](guides/02-capsule-installation.md)
+2. [Capsule Proxy Installation](guides/03-capsule-proxy-installation.md)
+3. [Setup a Multitenancy Environment](guides/04-multitenant-environment.md)
 
 ## What’s next
 
