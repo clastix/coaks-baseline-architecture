@@ -43,8 +43,8 @@ The material here is relatively dense. We strongly encourage you to dedicate tim
 
 1. [AKS Creation with AAD integration](guides/01-create-aks-with-add.md)
 2. [Capsule Installation](guides/02-capsule-installation.md)
-2. [Capsule Proxy Installation](guides/03-capsule-proxy-installation.md)
-3. [Setup a Multitenancy Environment](guides/04-multitenant-environment.md)
+3. [Capsule Proxy Installation](guides/03-capsule-proxy-installation.md)
+4. [Setup a Multitenancy Environment](guides/04-multitenant-environment.md)
 
 ## What’s next
 
