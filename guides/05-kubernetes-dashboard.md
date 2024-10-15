@@ -4,6 +4,10 @@ In the previous section, we saw how to setup **Capsule** to get full advantage o
 
 The same multi-tenant access can be achieved from a user-interface such as the [Kubernetes dashboard](https://github.com/kubernetes/dashboard).
 
+> Warning: this section is currenly not working as per breaking changes in more recent Kubernetes Dashboard, starting from [v7.0.0](https://github.com/kubernetes/dashboard/releases/tag/kubernetes-dashboard-7.0.0).
+
+We're working to find a solution and we'll update this section as soon we do it. Tracked with [this issue](https://github.com/clastix/coaks-baseline-architecture/issues/12).
+
 ### Prerequisites
 
 - An Ingress Controller, for the sake of simplicity the [Ingress-NGINX Controller](https://github.com/kubernetes/ingress-nginx) has been implemented, YMMV using a different one due to different annotations for redirects, etc.
@@ -198,6 +202,6 @@ You can connect to the URL `https://dashboard.energycorp.com` which will redirec
 
 Users can prompt their credentials and, after confirming the required grants, upon successful login will be redirect to the Kubernetes Dashboard backed by the Capsule Proxy providing the required filtered resources.
 
-### Additional resources
+## Cleaning
 
-A complete guide in regards to customizing the Kubernetes Dashboard can be found on the [Capsule documentation website](https://capsule.clastix.io/docs/guides/kubernetes-dashboard).
+[Cleaning the environment](10-cleaning.md).
