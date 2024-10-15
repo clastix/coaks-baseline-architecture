@@ -129,4 +129,4 @@ solar-development   Active   1h
 
 ## What’s next
 
-Installing the Kubernetes Dashboard for [tenant owners access](04-kubernets-dashboard.md).
+Installing the Kubernetes Dashboard for [tenant owners access](05-kubernets-dashboard.md).
